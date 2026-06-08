@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  PATIENT
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  name          String?
+  phone         String?
+  role          Role      @default(PATIENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  appointments  Appointment[]
+  clinicalRecords ClinicalRecord[]
+}
+
+model Availability {
+  id          String   @id @default(cuid())
+  dayOfWeek   Int      // 0 = Sunday, 1 = Monday, etc.
+  startTime   String   // "09:00"
+  endTime     String   // "17:00"
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  date        DateTime          @db.Date
+  startTime   String            // "10:00"
+  endTime     String            // "11:00"
+  status      AppointmentStatus @default(PENDING)
+  notes       String?
+  
+  patientId   String
+  patient     User              @relation(fields: [patientId], references: [id])
+  
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model ClinicalRecord {
+  id          String   @id @default(cuid())
+  content     String
+  date        DateTime @default(now())
+  attachmentUrl String?
+
+  patientId   String
+  patient     User     @relation(fields: [patientId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
