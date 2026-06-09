@@ -86,3 +86,23 @@ export async function setPatientPassword(patientId: string, passwordPlain: strin
     return { success: false, error: "Error al asignar contraseña." }
   }
 }
+
+export async function deletePatient(patientId: string) {
+  try {
+    await prisma.$transaction([
+      prisma.clinicalRecord.deleteMany({ where: { patientId } }),
+      prisma.appointment.deleteMany({ where: { patientId } }),
+      prisma.notification.deleteMany({ where: { userId: patientId } }), // En caso de que el paciente tuviera notificaciones por error
+      prisma.user.delete({ where: { id: patientId } })
+    ])
+    
+    revalidatePath('/dashboard/pacientes')
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/citas')
+    
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting patient:", error)
+    return { success: false, error: "Error al eliminar paciente. Podría tener dependencias complejas." }
+  }
+}

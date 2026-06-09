@@ -21,6 +21,7 @@ export function BookingForm() {
   
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
 
   // Fetch slots when date changes
   useEffect(() => {
@@ -42,7 +43,24 @@ export function BookingForm() {
   }, [date])
 
   const handleSubmit = async () => {
-    if (!date || !selectedTime || !name || !email) return
+    setErrorMsg("")
+    
+    if (!date || !selectedTime) return
+    
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setErrorMsg("Por favor no dejes ningún campo vacío (Nombre, Correo y Teléfono).")
+      return
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setErrorMsg("Por favor ingresa un correo electrónico válido.")
+      return
+    }
+
+    if (!/^\d+$/.test(phone.trim())) {
+      setErrorMsg("El teléfono debe contener únicamente números.")
+      return
+    }
     
     setLoadingSubmit(true)
     const res = await createPublicAppointment({
@@ -56,7 +74,7 @@ export function BookingForm() {
     if (res.success) {
       setSuccess(true)
     } else {
-      alert(res.error)
+      setErrorMsg(res.error || "Ocurrió un error al agendar tu cita.")
     }
     setLoadingSubmit(false)
   }
@@ -106,7 +124,12 @@ export function BookingForm() {
                 selected={date}
                 onSelect={setDate}
                 className="rounded-3xl"
-                disabled={(d) => d < new Date(new Date().setHours(0,0,0,0)) || d.getDay() === 0}
+                disabled={(d) => {
+                  const today = new Date(new Date().setHours(0,0,0,0))
+                  const maxDate = new Date(today)
+                  maxDate.setDate(maxDate.getDate() + 14) // Ventana de 14 días (RECOMENDADO)
+                  return d < today || d > maxDate || d.getDay() === 0
+                }}
               />
             </div>
             
@@ -161,9 +184,14 @@ export function BookingForm() {
                 <Input id="telefono" type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="555-0100" className="rounded-full bg-white border-2 border-amber-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
               </div>
               <div className="pt-6">
+                {errorMsg && (
+                  <p className="text-red-500 font-bold text-sm text-center mb-4 bg-red-50 p-3 rounded-2xl border border-red-100">
+                    {errorMsg}
+                  </p>
+                )}
                 <Button 
                   onClick={handleSubmit}
-                  disabled={loadingSubmit || !name || !email}
+                  disabled={loadingSubmit || !name.trim() || !email.trim() || !phone.trim()}
                   className="w-full rounded-full h-14 text-lg font-black shadow-lg shadow-orange-200 bg-primary hover:bg-orange-500 hover:-translate-y-1 transition-all text-white"
                 >
                   {loadingSubmit ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}

@@ -8,6 +8,8 @@ import { getAvailableSlots, createPrivateAppointment } from "@/actions/appointme
 import { Loader2, CheckCircle2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
+import { toast } from "sonner"
+
 export function PrivateBookingForm({ patientId }: { patientId: string }) {
   const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(undefined)
@@ -51,7 +53,7 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
     if (res.success) {
       setSuccess(true)
     } else {
-      alert(res.error)
+      toast.error(res.error || "Ocurrió un error al agendar la sesión")
     }
     setLoadingSubmit(false)
   }
@@ -94,7 +96,12 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
               selected={date}
               onSelect={setDate}
               className="rounded-3xl"
-              disabled={(d) => d < new Date(new Date().setHours(0,0,0,0)) || d.getDay() === 0}
+              disabled={(d) => {
+                const today = new Date(new Date().setHours(0,0,0,0))
+                const maxDate = new Date(today)
+                maxDate.setDate(maxDate.getDate() + 14) // Ventana de 14 días (RECOMENDADO)
+                return d < today || d > maxDate || d.getDay() === 0
+              }}
             />
           </div>
         </div>

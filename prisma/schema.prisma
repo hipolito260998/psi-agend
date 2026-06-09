@@ -30,6 +30,7 @@ model User {
 
   appointments  Appointment[]
   clinicalRecords ClinicalRecord[]
+  notifications   Notification[]
 }
 
 model Availability {
@@ -62,6 +63,20 @@ model ClinicalRecord {
 
   patientId   String
   patient     User     @relation(fields: [patientId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  link        String?
+
+  userId      String   // Admin to whom this notification belongs
+  user        User     @relation(fields: [userId], references: [id])
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

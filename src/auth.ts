@@ -7,16 +7,16 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import bcrypt from "bcryptjs"
 
 // Evitar instanciar múltiples PrismaClients en desarrollo
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+const globalForPrismaV2 = globalThis as unknown as {
+  prismaV2: PrismaClient | undefined
 }
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter })
+export const prisma = globalForPrismaV2.prismaV2 ?? new PrismaClient({ adapter })
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== "production") globalForPrismaV2.prismaV2 = prisma
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),

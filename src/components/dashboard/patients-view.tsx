@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { createPatient, addClinicalRecord, getClinicalRecords, setPatientPassword } from "@/actions/patients"
-import { Loader2, Plus, FileText, UserCircle2, Key } from "lucide-react"
+import { createPatient, addClinicalRecord, getClinicalRecords, setPatientPassword, deletePatient } from "@/actions/patients"
+import { Loader2, Plus, FileText, UserCircle2, Key, Trash2 } from "lucide-react"
 
 // Types matching prisma
 type User = { id: string, name: string | null, email: string, phone: string | null, _count?: { appointments: number, clinicalRecords: number } }
 type Record = { id: string, content: string, date: Date }
+
+import { toast } from "sonner"
 
 export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
   const [patients, setPatients] = useState<User[]>(initialPatients)
@@ -39,8 +41,9 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
       setPatients([res.data as User, ...patients])
       setShowCreate(false)
       setNewName(""); setNewEmail(""); setNewPhone("")
+      toast.success("Paciente agregado correctamente")
     } else {
-      alert(res.error)
+      toast.error(res.error || "Ocurrió un error")
     }
     setLoading(false)
   }
@@ -68,6 +71,9 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
           ? { ...p, _count: { ...p._count!, clinicalRecords: (p._count?.clinicalRecords || 0) + 1 } }
           : p
       ))
+      toast.success("Nota agregada al expediente")
+    } else {
+      toast.error(res.error || "No se pudo guardar la nota")
     }
     setLoadingRecord(false)
   }
@@ -77,13 +83,33 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
     setLoadingPassword(true)
     const res = await setPatientPassword(selectedPatient.id, newPassword)
     if (res.success) {
-      alert("Contraseña asignada correctamente. Ya puedes compartirla con el paciente.")
+      toast.success("Contraseña asignada", {
+        description: "Ya puedes compartirla con el paciente para que acceda al portal."
+      })
       setNewPassword("")
       setShowPasswordForm(false)
     } else {
-      alert(res.error)
+      toast.error(res.error || "Error al asignar contraseña")
     }
     setLoadingPassword(false)
+  }
+
+  const [deleting, setDeleting] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const confirmDelete = async () => {
+    if (!selectedPatient) return
+    setDeleting(true)
+    const res = await deletePatient(selectedPatient.id)
+    if (res.success) {
+      setPatients(prev => prev.filter(p => p.id !== selectedPatient.id))
+      setSelectedPatient(null)
+      setShowDeleteModal(false)
+      toast.success("Paciente eliminado exitosamente")
+    } else {
+      toast.error(res.error || "No se pudo eliminar al paciente")
+    }
+    setDeleting(false)
   }
 
   return (
@@ -168,11 +194,54 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
                   <Key className="w-4 h-4 mr-2" />
                   Acceso a Portal
                 </Button>
+                <Button 
+                  onClick={() => setShowDeleteModal(true)}
+                  disabled={deleting}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full border-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Eliminar
+                </Button>
                 <span className="inline-block px-4 py-1 bg-white rounded-full text-amber-600 font-black text-sm border-2 border-amber-200 shadow-sm">
                   {selectedPatient._count?.clinicalRecords || 0} Notas
                 </span>
               </div>
             </div>
+
+            {/* Modal de Eliminación */}
+            {showDeleteModal && (
+              <div className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-[3rem] p-10 max-w-md w-full shadow-2xl border-4 border-red-50 text-center animate-in fade-in zoom-in duration-200">
+                  <div className="size-20 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Trash2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="text-3xl font-black text-zinc-900 mb-3">¿Eliminar Paciente?</h3>
+                  <p className="text-lg text-zinc-600 font-medium mb-10 leading-snug">
+                    Esta acción es <span className="font-bold text-red-500">irreversible</span>. Se borrará su cuenta, todas sus citas y su expediente clínico completo.
+                  </p>
+                  <div className="flex gap-4 justify-center">
+                    <Button 
+                      onClick={() => setShowDeleteModal(false)} 
+                      variant="outline" 
+                      disabled={deleting}
+                      className="rounded-full h-14 px-8 font-black border-2 border-zinc-200 text-zinc-600 hover:bg-zinc-100"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button 
+                      onClick={confirmDelete} 
+                      disabled={deleting} 
+                      className="rounded-full h-14 px-8 bg-red-500 hover:bg-red-600 text-white font-black shadow-lg shadow-red-200"
+                    >
+                      {deleting ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : null}
+                      Sí, Eliminar
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Asignar Contraseña Form */}
             {showPasswordForm && (

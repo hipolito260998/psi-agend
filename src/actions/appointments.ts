@@ -3,6 +3,7 @@
 import { prisma } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { AppointmentStatus } from "@prisma/client"
+import { createNotification } from "@/actions/notifications"
 
 function normalizeDate(d: Date) {
   // Ignora la zona horaria y fuerza la medianoche en UTC para coincidir con @db.Date de Postgres
@@ -40,11 +41,27 @@ export async function getAvailableSlots(date: Date) {
     // 3. Generate 1-hour blocks from availability
     const slots: string[] = []
     
+    // Validar horas pasadas si la cita es para hoy
+    const now = new Date()
+    const todayNormalized = normalizeDate(now)
+    const isToday = normalized.getTime() === todayNormalized.getTime()
+    const isPastDate = normalized.getTime() < todayNormalized.getTime()
+
+    // Si la fecha solicitada ya pasó por completo, no hay citas
+    if (isPastDate) return { success: true, data: [] }
+
+    const currentHour = now.getHours()
+    
     for (const av of availabilities) {
       const startHour = parseInt(av.startTime.split(':')[0], 10)
       const endHour = parseInt(av.endTime.split(':')[0], 10)
       
       for (let h = startHour; h < endHour; h++) {
+        // Si es el mismo día, ocultar las horas que ya pasaron o que están en curso
+        if (isToday && h <= currentHour) {
+          continue
+        }
+
         const timeStr = `${h.toString().padStart(2, '0')}:00`
         if (!bookedTimes.has(timeStr)) {
           slots.push(timeStr)
@@ -168,6 +185,16 @@ export async function createPublicAppointment(data: {
       }
     })
     
+    // Notificar a todos los usuarios (para garantizar que llegue al admin)
+    const admins = await prisma.user.findMany()
+    for (const admin of admins) {
+      await createNotification(
+        admin.id, 
+        "¡Nueva Cita Programada! 🎉", 
+        `${patient.name} acaba de agendar una cita por la web para el ${normalized.toLocaleDateString('es-ES', { timeZone:'UTC', month:'short', day:'numeric'})} a las ${data.startTime}.`
+      )
+    }
+    
     revalidatePath('/dashboard/citas')
     revalidatePath('/dashboard/pacientes')
     
@@ -194,8 +221,19 @@ export async function createPrivateAppointment(data: {
         startTime: data.startTime,
         endTime,
         patientId: data.patientId
-      }
+      },
+      include: { patient: true }
     })
+    
+    // Notificar a todos los usuarios (para garantizar que llegue al admin)
+    const admins = await prisma.user.findMany()
+    for (const admin of admins) {
+      await createNotification(
+        admin.id, 
+        "Cita Agendada desde Portal 📲", 
+        `El padre de ${appointment.patient.name} acaba de agendar una nueva sesión para el ${normalized.toLocaleDateString('es-ES', { timeZone:'UTC', month:'short', day:'numeric'})} a las ${data.startTime}.`
+      )
+    }
     
     revalidatePath('/dashboard/citas')
     revalidatePath('/portal')

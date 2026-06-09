@@ -3,6 +3,7 @@ import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
 import { LogOut } from "lucide-react"
 import { DashboardNav } from "@/components/dashboard/dashboard-nav"
+import { NotificationBell } from "@/components/dashboard/notification-bell"
 
 export default async function DashboardLayout({
   children,
@@ -23,11 +24,14 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col bg-muted/30 md:flex-row">
       <aside className="hidden w-64 flex-col border-r-4 border-amber-50 bg-white md:flex">
-        <div className="flex h-24 items-center border-b-4 border-amber-50 px-6 gap-3">
-          <div className="size-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-sm shadow-orange-200">
-            <span className="text-primary-foreground text-xl font-bold">P</span>
+        <div className="flex h-24 items-center justify-between border-b-4 border-amber-50 px-6 gap-2">
+          <div className="flex items-center gap-3">
+            <div className="size-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-sm shadow-orange-200 shrink-0">
+              <span className="text-primary-foreground text-xl font-bold">P</span>
+            </div>
+            <span className="text-xl font-black text-primary tracking-tight">PsiAgend</span>
           </div>
-          <span className="text-2xl font-black text-primary tracking-tight">PsiAgend</span>
+          <NotificationBell userId={session.user.id!} />
         </div>
         <DashboardNav />
         <div className="border-t-4 border-amber-50 p-6">
