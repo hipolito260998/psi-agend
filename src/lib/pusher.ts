@@ -6,10 +6,10 @@ const globalForPusherV2 = globalThis as unknown as {
 }
 
 export const pusherServer = globalForPusherV2.pusherV2 ?? new Pusher({
-  appId: "2164758",
-  key: "e2b815df86ed71acf449",
-  secret: "2b2b9656a95262b02cfa",
-  cluster: "us3",
+  appId: process.env.PUSHER_APP_ID || "",
+  key: process.env.NEXT_PUBLIC_PUSHER_KEY || "",
+  secret: process.env.PUSHER_SECRET || "",
+  cluster: process.env.PUSHER_CLUSTER || "",
   useTLS: true,
 })
 

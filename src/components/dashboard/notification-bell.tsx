@@ -38,8 +38,8 @@ export function NotificationBell({ userId }: { userId: string }) {
     // Enable pusher logging for debug
     Pusher.logToConsole = true;
 
-    const pusher = new Pusher("e2b815df86ed71acf449", {
-      cluster: "us3",
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY || "", {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "us3",
     })
 
     const channel = pusher.subscribe(`admin-${userId}`)
@@ -60,6 +60,7 @@ export function NotificationBell({ userId }: { userId: string }) {
 
     return () => {
       pusher.unsubscribe(`admin-${userId}`)
+      pusher.disconnect()
     }
   }, [userId, router])
 

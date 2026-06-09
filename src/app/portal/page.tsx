@@ -87,6 +87,14 @@ export default async function PortalPage() {
                 </div>
               ))
             )}
+            
+            {upcomingAppointments.length > 0 && (
+              <div className="mt-4 bg-amber-100/50 p-4 rounded-2xl border border-amber-200 text-center">
+                <p className="text-sm font-medium text-amber-800">
+                  <span className="font-bold">Importante:</span> Para cancelar o reprogramar una cita, por favor comunícate directamente con tu terapeuta.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
