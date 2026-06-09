@@ -4,6 +4,11 @@ import { prisma } from "@/auth"
 import { revalidatePath } from "next/cache"
 import { AppointmentStatus } from "@prisma/client"
 
+function normalizeDate(d: Date) {
+  // Ignora la zona horaria y fuerza la medianoche en UTC para coincidir con @db.Date de Postgres
+  return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+}
+
 /**
  * Calculates 1-hour available slots for a given date.
  */
@@ -18,19 +23,12 @@ export async function getAvailableSlots(date: Date) {
     
     if (availabilities.length === 0) return { success: true, data: [] }
     
+    const normalized = normalizeDate(date)
+    
     // 2. Get existing appointments for this exact date
-    const startOfDay = new Date(date)
-    startOfDay.setHours(0, 0, 0, 0)
-    
-    const endOfDay = new Date(date)
-    endOfDay.setHours(23, 59, 59, 999)
-    
     const existingAppointments = await prisma.appointment.findMany({
       where: {
-        date: {
-          gte: startOfDay,
-          lte: endOfDay
-        },
+        date: normalized,
         status: {
           not: 'CANCELLED' // Cancelled appointments free up the slot
         }
@@ -74,10 +72,11 @@ export async function createAppointment(data: {
     // End time is assumed to be 1 hour later
     const startHour = parseInt(data.startTime.split(':')[0], 10)
     const endTime = `${(startHour + 1).toString().padStart(2, '0')}:00`
+    const normalized = normalizeDate(data.date)
     
     const appointment = await prisma.appointment.create({
       data: {
-        date: data.date,
+        date: normalized,
         startTime: data.startTime,
         endTime,
         patientId: data.patientId,
@@ -95,18 +94,11 @@ export async function createAppointment(data: {
 
 export async function getAppointments(date: Date) {
   try {
-    const startOfDay = new Date(date)
-    startOfDay.setHours(0, 0, 0, 0)
-    
-    const endOfDay = new Date(date)
-    endOfDay.setHours(23, 59, 59, 999)
+    const normalized = normalizeDate(date)
     
     const appointments = await prisma.appointment.findMany({
       where: {
-        date: {
-          gte: startOfDay,
-          lte: endOfDay
-        }
+        date: normalized
       },
       include: {
         patient: true
@@ -165,10 +157,11 @@ export async function createPublicAppointment(data: {
     // Create appointment
     const startHour = parseInt(data.startTime.split(':')[0], 10)
     const endTime = `${(startHour + 1).toString().padStart(2, '0')}:00`
+    const normalized = normalizeDate(data.date)
     
     const appointment = await prisma.appointment.create({
       data: {
-        date: data.date,
+        date: normalized,
         startTime: data.startTime,
         endTime,
         patientId: patient.id
@@ -182,5 +175,35 @@ export async function createPublicAppointment(data: {
   } catch (error) {
     console.error("Error in public appointment creation:", error)
     return { success: false, error: "Error al registrar la cita." }
+  }
+}
+
+export async function createPrivateAppointment(data: {
+  date: Date
+  startTime: string
+  patientId: string
+}) {
+  try {
+    const startHour = parseInt(data.startTime.split(':')[0], 10)
+    const endTime = `${(startHour + 1).toString().padStart(2, '0')}:00`
+    const normalized = normalizeDate(data.date)
+    
+    const appointment = await prisma.appointment.create({
+      data: {
+        date: normalized,
+        startTime: data.startTime,
+        endTime,
+        patientId: data.patientId
+      }
+    })
+    
+    revalidatePath('/dashboard/citas')
+    revalidatePath('/portal')
+    revalidatePath('/portal/agendar')
+    
+    return { success: true, data: appointment }
+  } catch (error) {
+    console.error("Error in private appointment creation:", error)
+    return { success: false, error: "Error al agendar la sesión." }
   }
 }

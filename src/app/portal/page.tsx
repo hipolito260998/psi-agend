@@ -11,14 +11,14 @@ export default async function PortalPage() {
 
   if (!userId) return null
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const now = new Date()
+  const todayNormalized = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()))
 
   // Consultar próximas citas (Pendientes o Confirmadas) a partir de hoy
   const upcomingAppointments = await prisma.appointment.findMany({
     where: {
       patientId: userId,
-      date: { gte: today },
+      date: { gte: todayNormalized },
       status: { in: ['PENDING', 'CONFIRMED'] }
     },
     orderBy: [
@@ -68,8 +68,8 @@ export default async function PortalPage() {
               upcomingAppointments.map((cita) => (
                 <div key={cita.id} className="flex flex-col sm:flex-row gap-4 p-5 bg-amber-50 rounded-3xl border-2 border-amber-100">
                   <div className="bg-white border-2 border-amber-200 px-4 py-3 rounded-2xl flex flex-col items-center justify-center min-w-[100px] shadow-sm">
-                    <span className="text-xs font-bold text-amber-600 uppercase">{cita.date.toLocaleDateString('es-ES', { month: 'short' })}</span>
-                    <span className="text-3xl font-black text-amber-900 leading-none">{cita.date.getDate()}</span>
+                    <span className="text-xs font-bold text-amber-600 uppercase">{cita.date.toLocaleDateString('es-ES', { timeZone: 'UTC', month: 'short' })}</span>
+                    <span className="text-3xl font-black text-amber-900 leading-none">{cita.date.getUTCDate()}</span>
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-2 mb-1">
@@ -109,7 +109,7 @@ export default async function PortalPage() {
                 <div key={cita.id} className="flex items-center justify-between p-4 bg-sky-50 rounded-2xl border border-sky-100">
                   <div>
                     <p className="font-bold text-sky-900">
-                      {cita.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                      {cita.date.toLocaleDateString('es-ES', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' })}
                     </p>
                     <p className="text-sm text-sky-700 font-medium">{cita.startTime}</p>
                   </div>

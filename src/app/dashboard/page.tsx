@@ -9,17 +9,14 @@ export default async function DashboardPage() {
   const session = await auth()
 
   // Fechas para consultas
-  const todayStart = new Date()
-  todayStart.setHours(0, 0, 0, 0)
-  
-  const todayEnd = new Date()
-  todayEnd.setHours(23, 59, 59, 999)
+  const now = new Date()
+  const todayNormalized = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()))
 
   // Consultas a BD
   const [citasHoy, pacientesTotales, citasCompletadas, proximasCitas] = await Promise.all([
     prisma.appointment.count({
       where: {
-        date: { gte: todayStart, lte: todayEnd },
+        date: todayNormalized,
         status: { not: 'CANCELLED' }
       }
     }),
@@ -31,7 +28,7 @@ export default async function DashboardPage() {
     }),
     prisma.appointment.findMany({
       where: {
-        date: { gte: todayStart, lte: todayEnd },
+        date: todayNormalized,
         status: { not: 'CANCELLED' }
       },
       include: { patient: true },

@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
-import { CalendarHeart, LayoutDashboard, LogOut } from "lucide-react"
+import { CalendarHeart, LogOut } from "lucide-react"
+import { PortalNav } from "@/components/portal/portal-nav"
 
 export default async function PortalLayout({
   children,
@@ -28,13 +29,7 @@ export default async function PortalLayout({
           </div>
           <span className="text-xl font-black text-sky-900 tracking-tight leading-tight">Portal<br/>de Padres</span>
         </div>
-        <nav className="flex-1 space-y-2 p-6">
-          <Link href="/portal" className="flex items-center gap-3 rounded-2xl bg-sky-100 px-4 py-3 text-sky-700 transition-colors hover:bg-sky-200 font-bold">
-            <LayoutDashboard className="h-5 w-5" />
-            <span>Mis Citas</span>
-          </Link>
-          {/* We can add more links later, e.g. /portal/pagos */}
-        </nav>
+        <PortalNav />
         <div className="border-t-2 border-sky-50 p-6">
           <form action={async () => {
             'use server'
