@@ -62,16 +62,16 @@ export default async function DashboardPage() {
         </div>
 
         {/* Tarjeta 2 */}
-        <div className="bg-amber-50 rounded-[2rem] p-6 border-2 border-amber-100 flex flex-col justify-between h-40 shadow-sm transition-transform hover:-translate-y-1">
+        <div className="bg-purple-50 rounded-[2rem] p-6 border-2 border-purple-100 flex flex-col justify-between h-40 shadow-sm transition-transform hover:-translate-y-1">
           <div className="flex items-center justify-between">
-            <h3 className="text-amber-900 font-bold text-lg">Pacientes Activos</h3>
-            <div className="size-10 rounded-full bg-amber-200 text-amber-700 flex items-center justify-center">
+            <h3 className="text-purple-900 font-bold text-lg">Pacientes Activos</h3>
+            <div className="size-10 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center">
               <Users className="h-5 w-5" />
             </div>
           </div>
           <div>
-            <p className="text-4xl font-black text-amber-900">{pacientesTotales}</p>
-            <p className="text-amber-700 font-medium text-sm mt-1">Familias en el sistema</p>
+            <p className="text-4xl font-black text-purple-900">{pacientesTotales}</p>
+            <p className="text-purple-700 font-medium text-sm mt-1">Familias en el sistema</p>
           </div>
         </div>
 

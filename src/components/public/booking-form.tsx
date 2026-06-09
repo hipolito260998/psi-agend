@@ -90,7 +90,7 @@ export function BookingForm() {
           Hemos registrado tu cita exitosamente. Te enviaremos un correo con los detalles.
         </p>
         <Link href="/">
-          <Button className="rounded-full h-14 px-10 text-lg font-black shadow-lg bg-primary hover:bg-orange-500 text-white">
+          <Button className="rounded-full h-14 px-10 text-lg font-black shadow-lg bg-primary hover:bg-violet-500 text-white">
             Volver al inicio
           </Button>
         </Link>
@@ -99,9 +99,9 @@ export function BookingForm() {
   }
 
   return (
-    <div className="w-full max-w-4xl bg-white rounded-[3rem] shadow-xl shadow-orange-900/5 p-8 md:p-12 border-4 border-amber-50">
+    <div className="w-full max-w-4xl bg-white rounded-[3rem] shadow-xl shadow-violet-900/5 p-8 md:p-12 border-4 border-purple-50">
       <div className="space-y-4 text-center mb-12">
-        <Link href="/" className="inline-block text-sm font-bold text-primary hover:text-orange-500 mb-4 bg-amber-50 px-4 py-2 rounded-full transition-colors">
+        <Link href="/" className="inline-block text-sm font-bold text-primary hover:text-violet-500 mb-4 bg-purple-50 px-4 py-2 rounded-full transition-colors">
           ← Volver al inicio
         </Link>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">Agenda tu sesión</h1>
@@ -112,18 +112,18 @@ export function BookingForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
         {/* Paso 1 */}
-        <div className="space-y-8 bg-sky-50/50 p-6 rounded-[2rem] border-2 border-sky-100">
+        <div className="space-y-8 bg-purple-50/50 p-6 rounded-[2rem] border-2 border-purple-100">
           <div className="space-y-4">
-            <h2 className="text-2xl font-black text-sky-900 flex items-center gap-2">
-              <span className="flex h-8 w-8 rounded-full bg-sky-200 items-center justify-center text-sky-700 text-lg">1</span>
+            <h2 className="text-2xl font-black text-purple-900 flex items-center gap-2">
+              <span className="flex h-8 w-8 rounded-full bg-purple-200 items-center justify-center text-purple-800 text-lg">1</span>
               Fecha y Hora
             </h2>
-            <div className="flex justify-center bg-white p-4 rounded-3xl shadow-sm border border-sky-100">
+            <div className="flex justify-center pb-4">
               <Calendar
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                className="rounded-3xl"
+                className="bg-white rounded-[2rem] shadow-sm border border-purple-100 p-4 md:p-6"
                 disabled={(d) => {
                   const today = new Date(new Date().setHours(0,0,0,0))
                   const maxDate = new Date(today)
@@ -133,14 +133,14 @@ export function BookingForm() {
               />
             </div>
             
-            <div className="space-y-4 pt-4 min-h-[120px]">
-              <Label className="text-sky-800 font-bold text-base">Horarios disponibles:</Label>
+            <div className="space-y-4 pt-2 min-h-[120px]">
+              <Label className="text-purple-900 font-bold text-base">Horarios disponibles:</Label>
               {!date ? (
-                <p className="text-sm text-sky-600 font-medium text-center italic py-4 bg-white rounded-2xl border border-sky-100">Selecciona un día en el calendario.</p>
+                <p className="text-sm text-purple-700 font-medium text-center italic py-4 bg-white rounded-2xl border border-purple-100">Selecciona un día en el calendario.</p>
               ) : loadingSlots ? (
-                <div className="flex justify-center py-4 text-sky-500"><Loader2 className="animate-spin w-6 h-6" /></div>
+                <div className="flex justify-center py-4 text-purple-500"><Loader2 className="animate-spin w-6 h-6" /></div>
               ) : slots.length === 0 ? (
-                <p className="text-sm text-sky-600 font-medium text-center italic py-4 bg-white rounded-2xl border border-sky-100">No hay horarios disponibles para este día.</p>
+                <p className="text-sm text-purple-700 font-medium text-center italic py-4 bg-white rounded-2xl border border-purple-100">No hay horarios disponibles para este día.</p>
               ) : (
                 <div className="grid grid-cols-3 gap-3">
                   {slots.map(slot => (
@@ -150,8 +150,8 @@ export function BookingForm() {
                       variant={selectedTime === slot ? "default" : "outline"} 
                       className={`rounded-full font-bold h-12 ${
                         selectedTime === slot 
-                        ? 'bg-sky-500 hover:bg-sky-600 text-white shadow-md' 
-                        : 'border-2 border-sky-200 text-sky-700 hover:bg-sky-100'
+                        ? 'bg-violet-500 hover:bg-violet-600 text-white shadow-md' 
+                        : 'border-2 border-purple-200 text-purple-800 hover:bg-purple-100'
                       }`}
                     >
                       {slot}
@@ -164,24 +164,24 @@ export function BookingForm() {
         </div>
 
         {/* Paso 2 */}
-        <div className={`space-y-8 p-6 rounded-[2rem] border-2 transition-all ${selectedTime ? 'bg-amber-50/50 border-amber-100' : 'bg-zinc-50 border-zinc-100 opacity-50 pointer-events-none'}`}>
+        <div className={`space-y-8 p-6 rounded-[2rem] border-2 transition-all ${selectedTime ? 'bg-purple-50/50 border-purple-100' : 'bg-zinc-50 border-zinc-100 opacity-50 pointer-events-none'}`}>
           <div className="space-y-6">
-            <h2 className="text-2xl font-black text-amber-900 flex items-center gap-2">
-              <span className="flex h-8 w-8 rounded-full bg-amber-200 items-center justify-center text-amber-800 text-lg">2</span>
+            <h2 className="text-2xl font-black text-purple-900 flex items-center gap-2">
+              <span className="flex h-8 w-8 rounded-full bg-purple-200 items-center justify-center text-purple-800 text-lg">2</span>
               Tus Datos
             </h2>
             <div className="space-y-5 pt-2">
               <div className="space-y-2">
-                <Label htmlFor="nombre" className="font-bold text-amber-900 ml-2">Nombre del Padre/Tutor</Label>
-                <Input id="nombre" required value={name} onChange={e => setName(e.target.value)} placeholder="Ej. Juan Pérez" className="rounded-full bg-white border-2 border-amber-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
+                <Label htmlFor="nombre" className="font-bold text-purple-900 ml-2">Nombre del Padre/Tutor</Label>
+                <Input id="nombre" required value={name} onChange={e => setName(e.target.value)} placeholder="Ej. Juan Pérez" className="rounded-full bg-white border-2 border-purple-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email" className="font-bold text-amber-900 ml-2">Correo Electrónico</Label>
-                <Input id="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="correo@ejemplo.com" className="rounded-full bg-white border-2 border-amber-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
+                <Label htmlFor="email" className="font-bold text-purple-900 ml-2">Correo Electrónico</Label>
+                <Input id="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="correo@ejemplo.com" className="rounded-full bg-white border-2 border-purple-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="telefono" className="font-bold text-amber-900 ml-2">Teléfono de Contacto</Label>
-                <Input id="telefono" type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="555-0100" className="rounded-full bg-white border-2 border-amber-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
+                <Label htmlFor="telefono" className="font-bold text-purple-900 ml-2">Teléfono de Contacto</Label>
+                <Input id="telefono" type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="555-0100" className="rounded-full bg-white border-2 border-purple-200 focus-visible:ring-2 focus-visible:ring-primary h-12 px-6 shadow-sm font-medium" />
               </div>
               <div className="pt-6">
                 {errorMsg && (
@@ -192,7 +192,7 @@ export function BookingForm() {
                 <Button 
                   onClick={handleSubmit}
                   disabled={loadingSubmit || !name.trim() || !email.trim() || !phone.trim()}
-                  className="w-full rounded-full h-14 text-lg font-black shadow-lg shadow-orange-200 bg-primary hover:bg-orange-500 hover:-translate-y-1 transition-all text-white"
+                  className="w-full rounded-full h-14 text-lg font-black shadow-lg shadow-violet-200 bg-primary hover:bg-violet-500 hover:-translate-y-1 transition-all text-white"
                 >
                   {loadingSubmit ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
                   {loadingSubmit ? "Procesando..." : "Confirmar Reserva"}

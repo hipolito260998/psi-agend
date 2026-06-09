@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { Button } from "@/components/ui/button"
-import { getAppointments, updateAppointmentStatus } from "@/actions/appointments"
-import { Loader2, CheckCircle2, Clock, XCircle, Info } from "lucide-react"
+import { getAppointments, updateAppointmentStatus, getActiveAppointmentDates } from "@/actions/appointments"
+import { Loader2, CheckCircle2, Clock, XCircle, Info, Phone } from "lucide-react"
 
 type Appointment = {
   id: string
@@ -16,14 +16,32 @@ type Appointment = {
   patient: {
     name: string | null
     email: string
+    phone: string | null
   }
 }
 
 export function AppointmentsView() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [activeDates, setActiveDates] = useState<Date[]>([])
   const [loading, setLoading] = useState(false)
   const [updating, setUpdating] = useState<string | null>(null)
+
+  const fetchActiveDates = async () => {
+    const res = await getActiveAppointmentDates()
+    if (res.success && res.data) {
+      setActiveDates(res.data.map(d => {
+        // d es "2026-06-09T00:00:00.000Z". Cortamos por la 'T' para extraer el año, mes y día,
+        // y creamos una fecha local en el navegador para que no se desface por zonas horarias.
+        const [year, month, day] = d.split('T')[0].split('-').map(Number)
+        return new Date(year, month - 1, day)
+      }))
+    }
+  }
+
+  useEffect(() => {
+    fetchActiveDates()
+  }, [])
 
   useEffect(() => {
     async function fetchAppointments() {
@@ -44,6 +62,10 @@ export function AppointmentsView() {
     const res = await updateAppointmentStatus(id, status)
     if (res.success) {
       setAppointments(appointments.map(a => a.id === id ? { ...a, status } : a))
+      // Refrescar los puntitos rojos en caso de que se cancele la última cita de un día
+      if (status === 'CANCELLED') {
+        fetchActiveDates()
+      }
     }
     setUpdating(null)
   }
@@ -52,31 +74,38 @@ export function AppointmentsView() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       {/* Calendario */}
-      <div className="lg:col-span-1 bg-white p-6 rounded-[2rem] border-2 border-amber-100 shadow-sm flex flex-col items-center">
-        <h2 className="text-xl font-black text-amber-900 mb-6 w-full text-left">Selecciona un día</h2>
-        <div className="bg-amber-50 p-4 rounded-[2rem] border-2 border-amber-100">
+      <div className="lg:col-span-1 bg-white p-6 rounded-[2rem] border-2 border-purple-100 shadow-sm flex flex-col items-center">
+        <h2 className="text-xl font-black text-purple-900 mb-6 w-full text-left">Selecciona un día</h2>
+        <div className="bg-purple-50 p-4 rounded-[2rem] border-2 border-purple-100">
           <Calendar
             mode="single"
             selected={date}
             onSelect={setDate}
             className="rounded-[1.5rem]"
+            disabled={(d) => d < new Date(new Date().setHours(0,0,0,0))}
+            modifiers={{
+              hasAppointment: activeDates
+            }}
+            modifiersClassNames={{
+              hasAppointment: "relative after:content-[''] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-purple-500 after:rounded-full font-bold text-purple-900"
+            }}
           />
         </div>
       </div>
 
       {/* Lista de Citas */}
-      <div className="lg:col-span-2 bg-white rounded-[2rem] border-2 border-sky-100 shadow-sm overflow-hidden flex flex-col min-h-[500px]">
-        <div className="bg-sky-50 p-6 border-b-2 border-sky-100 flex items-center justify-between">
+      <div className="lg:col-span-2 bg-white rounded-[2rem] border-2 border-purple-100 shadow-sm overflow-hidden flex flex-col min-h-[500px]">
+        <div className="bg-purple-50 p-6 border-b-2 border-purple-100 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-black text-sky-900">
+            <h2 className="text-2xl font-black text-violet-900">
               Agenda del Día
             </h2>
-            <p className="text-sky-700 font-bold text-sm">
+            <p className="text-violet-700 font-bold text-sm">
               {date ? date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Selecciona una fecha'}
             </p>
           </div>
           <div className="text-right">
-            <span className="inline-block px-4 py-1 bg-white rounded-full text-sky-600 font-black text-sm border-2 border-sky-200 shadow-sm">
+            <span className="inline-block px-4 py-1 bg-white rounded-full text-violet-600 font-black text-sm border-2 border-purple-200 shadow-sm">
               {appointments.length} Citas
             </span>
           </div>
@@ -84,15 +113,15 @@ export function AppointmentsView() {
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-full text-sky-600 space-y-4">
+            <div className="flex flex-col items-center justify-center h-full text-violet-600 space-y-4">
               <Loader2 className="w-10 h-10 animate-spin" />
               <p className="font-bold">Cargando agenda...</p>
             </div>
           ) : appointments.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-12">
-              <Info className="w-16 h-16 text-sky-200 mb-4" />
-              <h3 className="text-xl font-black text-sky-900 mb-2">Día libre</h3>
-              <p className="text-sky-700/70 font-medium max-w-sm">
+              <Info className="w-16 h-16 text-purple-200 mb-4" />
+              <h3 className="text-xl font-black text-violet-900 mb-2">Día libre</h3>
+              <p className="text-violet-700/70 font-medium max-w-sm">
                 No hay citas programadas para este día. ¡Disfruta tu tiempo o configura más disponibilidad!
               </p>
             </div>
@@ -105,9 +134,17 @@ export function AppointmentsView() {
                   </div>
                   <div>
                     <p className="font-black text-zinc-900 text-lg">{app.patient.name || 'Paciente sin nombre'}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      {app.status === 'PENDING' && <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full"><Clock className="w-3 h-3" /> Pendiente</span>}
-                      {app.status === 'CONFIRMED' && <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-100 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Confirmada</span>}
+                    
+                    {app.patient.phone && (
+                      <a href={`tel:${app.patient.phone}`} className="inline-flex items-center gap-1 text-sm text-violet-600 font-bold hover:text-violet-800 transition-colors mt-0.5">
+                        <Phone className="w-3.5 h-3.5" />
+                        {app.patient.phone}
+                      </a>
+                    )}
+
+                    <div className="flex items-center gap-2 mt-2">
+                      {app.status === 'PENDING' && <span className="inline-flex items-center gap-1 text-xs font-bold text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full"><Clock className="w-3 h-3" /> Pendiente</span>}
+                      {app.status === 'CONFIRMED' && <span className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 bg-purple-100 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Confirmada</span>}
                       {app.status === 'COMPLETED' && <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full"><CheckCircle2 className="w-3 h-3" /> Completada</span>}
                       {app.status === 'CANCELLED' && <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full"><XCircle className="w-3 h-3" /> Cancelada</span>}
                     </div>
@@ -122,7 +159,7 @@ export function AppointmentsView() {
                       onClick={() => handleUpdateStatus(app.id, 'CONFIRMED')}
                       disabled={updating === app.id}
                       size="sm"
-                      className="rounded-full bg-sky-500 hover:bg-sky-600 font-bold"
+                      className="rounded-full bg-purple-500 hover:bg-violet-600 font-bold"
                     >
                       Confirmar
                     </Button>

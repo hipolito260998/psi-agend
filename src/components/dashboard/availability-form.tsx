@@ -45,15 +45,15 @@ export function AvailabilityForm({ initialData }: { initialData: Availability[] 
   return (
     <div className="space-y-8">
       {/* Agregar Nuevo */}
-      <div className="bg-amber-50 p-6 rounded-[2rem] border-2 border-amber-200 shadow-sm">
-        <h2 className="text-xl font-black text-amber-900 mb-4">Agregar Horario</h2>
+      <div className="bg-purple-50 p-6 rounded-[2rem] border-2 border-purple-200 shadow-sm">
+        <h2 className="text-xl font-black text-purple-900 mb-4">Agregar Horario</h2>
         <div className="flex flex-col sm:flex-row gap-4 items-end">
           <div className="flex-1 space-y-2">
-            <label className="font-bold text-amber-800 ml-2">Día de la semana</label>
+            <label className="font-bold text-purple-800 ml-2">Día de la semana</label>
             <select 
               value={newDay} 
               onChange={(e) => setNewDay(Number(e.target.value))}
-              className="w-full rounded-full border-2 border-amber-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-amber-900"
+              className="w-full rounded-full border-2 border-purple-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-purple-900"
             >
               {DAYS.map((d, i) => (
                 i !== 0 ? <option key={i} value={i}>{d}</option> : null
@@ -61,21 +61,21 @@ export function AvailabilityForm({ initialData }: { initialData: Availability[] 
             </select>
           </div>
           <div className="flex-1 space-y-2">
-            <label className="font-bold text-amber-800 ml-2">Hora de Inicio</label>
+            <label className="font-bold text-purple-800 ml-2">Hora de Inicio</label>
             <select 
               value={newStart} 
               onChange={(e) => setNewStart(e.target.value)}
-              className="w-full rounded-full border-2 border-amber-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-amber-900"
+              className="w-full rounded-full border-2 border-purple-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-purple-900"
             >
               {HOURS.map((h) => <option key={h} value={h}>{h}</option>)}
             </select>
           </div>
           <div className="flex-1 space-y-2">
-            <label className="font-bold text-amber-800 ml-2">Hora de Fin</label>
+            <label className="font-bold text-purple-800 ml-2">Hora de Fin</label>
             <select 
               value={newEnd} 
               onChange={(e) => setNewEnd(e.target.value)}
-              className="w-full rounded-full border-2 border-amber-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-amber-900"
+              className="w-full rounded-full border-2 border-purple-200 bg-white h-12 px-4 focus:ring-2 focus:ring-primary font-medium text-purple-900"
             >
               {HOURS.map((h) => <option key={h} value={h}>{h}</option>)}
             </select>
@@ -83,7 +83,7 @@ export function AvailabilityForm({ initialData }: { initialData: Availability[] 
           <Button 
             onClick={handleAdd} 
             disabled={loading}
-            className="rounded-full h-12 px-8 font-black bg-primary hover:bg-orange-500 shadow-md text-white"
+            className="rounded-full h-12 px-8 font-black bg-primary hover:bg-violet-500 shadow-md text-white"
           >
             {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Guardar"}
           </Button>

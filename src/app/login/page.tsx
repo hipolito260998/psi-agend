@@ -46,7 +46,7 @@ export default function LoginPage() {
       </div>
 
       {/* Sección Derecha: Imagen Infantil */}
-      <div className="hidden lg:block lg:w-1/2 relative bg-amber-50">
+      <div className="hidden lg:block lg:w-1/2 relative bg-purple-50">
         <Image
           src="/login-bg-kids.png"
           alt="Ambiente cálido y acogedor para niños"
@@ -55,7 +55,7 @@ export default function LoginPage() {
           priority
         />
         
-        <div className="absolute bottom-16 right-16 left-16 p-8 bg-white/80 backdrop-blur-xl rounded-[2rem] border-2 border-white shadow-xl shadow-amber-900/5">
+        <div className="absolute bottom-16 right-16 left-16 p-8 bg-white/80 backdrop-blur-xl rounded-[2rem] border-2 border-white shadow-xl shadow-purple-900/5">
            <blockquote className="space-y-4">
              <p className="text-xl text-foreground font-bold leading-relaxed">
                &quot;Ver a nuestra hija volver a sonreír con confianza ha sido el mejor regalo. Las sesiones son como un juego para ella, pero los resultados son invaluables.&quot;

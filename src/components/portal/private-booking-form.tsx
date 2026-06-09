@@ -79,10 +79,10 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
   }
 
   return (
-    <div className="w-full bg-white rounded-[3rem] shadow-sm shadow-sky-900/5 p-8 md:p-12 border-4 border-sky-50">
+    <div className="w-full bg-white rounded-[3rem] shadow-sm shadow-violet-900/5 p-8 md:p-12 border-4 border-purple-50">
       <div className="space-y-4 mb-8">
-        <h2 className="text-3xl md:text-4xl font-black tracking-tight text-sky-900">Agendar Nueva Sesión</h2>
-        <p className="text-lg text-sky-700 font-medium max-w-xl">
+        <h2 className="text-3xl md:text-4xl font-black tracking-tight text-violet-900">Agendar Nueva Sesión</h2>
+        <p className="text-lg text-violet-700 font-medium max-w-xl">
           Elige el día y la hora para la próxima visita de tu pequeño. No necesitas volver a llenar tus datos.
         </p>
       </div>
@@ -90,12 +90,12 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
         {/* Calendario */}
         <div className="space-y-6">
-          <div className="flex justify-center bg-sky-50/50 p-4 rounded-[2rem] border-2 border-sky-100">
+          <div className="flex justify-center pb-4">
             <Calendar
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-3xl"
+              className="bg-white rounded-[2rem] shadow-sm border border-purple-100 p-4 md:p-6"
               disabled={(d) => {
                 const today = new Date(new Date().setHours(0,0,0,0))
                 const maxDate = new Date(today)
@@ -109,17 +109,17 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
         {/* Horarios y Confirmación */}
         <div className="space-y-8">
           <div className="space-y-4 min-h-[120px]">
-            <Label className="text-sky-900 font-black text-lg">Horarios Disponibles</Label>
+            <Label className="text-violet-900 font-black text-lg">Horarios Disponibles</Label>
             {!date ? (
-              <div className="bg-sky-50 rounded-3xl border-2 border-dashed border-sky-200 p-8 text-center">
-                <p className="text-sky-700 font-medium">Selecciona un día en el calendario para ver las horas libres.</p>
+              <div className="bg-purple-50 rounded-3xl border-2 border-dashed border-purple-200 p-8 text-center">
+                <p className="text-violet-700 font-medium">Selecciona un día en el calendario para ver las horas libres.</p>
               </div>
             ) : loadingSlots ? (
-              <div className="flex justify-center py-8 text-sky-500"><Loader2 className="animate-spin w-8 h-8" /></div>
+              <div className="flex justify-center py-8 text-purple-500"><Loader2 className="animate-spin w-8 h-8" /></div>
             ) : slots.length === 0 ? (
-              <div className="bg-amber-50 rounded-3xl border-2 border-dashed border-amber-200 p-8 text-center">
-                <p className="text-amber-800 font-bold">No hay horarios libres este día.</p>
-                <p className="text-amber-600 text-sm mt-1">Por favor elige otra fecha.</p>
+              <div className="bg-purple-50 rounded-3xl border-2 border-dashed border-purple-200 p-8 text-center">
+                <p className="text-purple-800 font-bold">No hay horarios libres este día.</p>
+                <p className="text-purple-600 text-sm mt-1">Por favor elige otra fecha.</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -130,8 +130,8 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
                     variant={selectedTime === slot ? "default" : "outline"} 
                     className={`rounded-full font-black h-14 text-base transition-all ${
                       selectedTime === slot 
-                      ? 'bg-amber-400 hover:bg-amber-500 text-amber-950 shadow-md scale-105' 
-                      : 'border-2 border-sky-200 text-sky-700 hover:bg-sky-100'
+                      ? 'bg-purple-400 hover:bg-purple-500 text-purple-950 shadow-md scale-105' 
+                      : 'border-2 border-purple-200 text-violet-700 hover:bg-purple-100'
                     }`}
                   >
                     {slot}
@@ -141,11 +141,11 @@ export function PrivateBookingForm({ patientId }: { patientId: string }) {
             )}
           </div>
 
-          <div className={`pt-8 border-t-2 border-sky-50 transition-opacity ${selectedTime ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+          <div className={`pt-8 border-t-2 border-purple-50 transition-opacity ${selectedTime ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
             <Button 
               onClick={handleSubmit}
               disabled={loadingSubmit || !selectedTime}
-              className="w-full rounded-full h-16 text-xl font-black shadow-lg shadow-sky-200 bg-sky-500 hover:bg-sky-600 hover:-translate-y-1 transition-all text-white"
+              className="w-full rounded-full h-16 text-xl font-black shadow-lg shadow-purple-200 bg-purple-500 hover:bg-violet-600 hover:-translate-y-1 transition-all text-white"
             >
               {loadingSubmit ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : null}
               {loadingSubmit ? "Agendando..." : "Confirmar Cita"}

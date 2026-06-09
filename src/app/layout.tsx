@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${nunito.variable}`}>
-      <body className="antialiased min-h-screen bg-amber-50/30 selection:bg-primary/20 font-sans">
+      <body className="antialiased min-h-screen bg-purple-50/30 selection:bg-primary/20 font-sans">
         {children}
         <Toaster position="bottom-right" />
       </body>

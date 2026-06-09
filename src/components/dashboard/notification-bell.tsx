@@ -80,9 +80,9 @@ export function NotificationBell({ userId }: { userId: string }) {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-3 bg-amber-50 hover:bg-amber-100 rounded-full transition-colors"
+        className="relative p-3 bg-purple-50 hover:bg-purple-100 rounded-full transition-colors"
       >
-        <Bell className="w-6 h-6 text-amber-700" />
+        <Bell className="w-6 h-6 text-purple-700" />
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white shadow-sm">
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -93,17 +93,17 @@ export function NotificationBell({ userId }: { userId: string }) {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute left-0 sm:left-full sm:-ml-12 mt-3 w-80 sm:w-96 bg-white rounded-[2rem] shadow-xl border-4 border-amber-50 z-50 overflow-hidden">
-            <div className="p-4 bg-amber-50 border-b-2 border-amber-100 flex items-center justify-between">
-              <h3 className="font-black text-amber-900 text-lg">Notificaciones</h3>
-              <span className="text-sm font-bold text-amber-700 bg-amber-200 px-2 py-1 rounded-full">{unreadCount} nuevas</span>
+          <div className="absolute left-0 sm:left-full sm:-ml-12 mt-3 w-80 sm:w-96 bg-white rounded-[2rem] shadow-xl border-4 border-purple-50 z-50 overflow-hidden">
+            <div className="p-4 bg-purple-50 border-b-2 border-purple-100 flex items-center justify-between">
+              <h3 className="font-black text-purple-900 text-lg">Notificaciones</h3>
+              <span className="text-sm font-bold text-purple-700 bg-purple-200 px-2 py-1 rounded-full">{unreadCount} nuevas</span>
             </div>
             
             <div className="max-h-[400px] overflow-y-auto p-2 space-y-2">
               {notifications.length === 0 ? (
                 <div className="text-center py-8">
-                  <Bell className="w-10 h-10 text-amber-200 mx-auto mb-2" />
-                  <p className="text-amber-800/60 font-bold">No tienes notificaciones nuevas</p>
+                  <Bell className="w-10 h-10 text-purple-200 mx-auto mb-2" />
+                  <p className="text-purple-800/60 font-bold">No tienes notificaciones nuevas</p>
                 </div>
               ) : (
                 notifications.map(n => (

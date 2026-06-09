@@ -26,7 +26,7 @@ export function PortalNav() {
             href={link.href} 
             className={`flex items-center gap-3 rounded-2xl px-4 py-3 font-bold transition-colors ${
               isActive 
-                ? "bg-amber-100 text-amber-700 hover:bg-amber-200" 
+                ? "bg-purple-100 text-purple-700 hover:bg-purple-200" 
                 : "bg-sky-50 text-sky-700 hover:bg-sky-100"
             }`}
           >

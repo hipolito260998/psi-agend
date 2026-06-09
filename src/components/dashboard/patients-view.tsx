@@ -116,25 +116,25 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       {/* Lista de Pacientes */}
-      <div className="lg:col-span-1 bg-white p-6 rounded-[2rem] border-2 border-sky-100 shadow-sm flex flex-col h-[calc(100vh-12rem)]">
+      <div className="lg:col-span-1 bg-white p-6 rounded-[2rem] border-2 border-purple-100 shadow-sm flex flex-col lg:h-[calc(100vh-12rem)] min-h-[400px]">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-sky-900">Directorio</h2>
+          <h2 className="text-xl font-black text-violet-900">Directorio</h2>
           <Button 
             onClick={() => setShowCreate(!showCreate)} 
             size="icon"
-            className="rounded-full bg-primary hover:bg-orange-500 text-white"
+            className="rounded-full bg-primary hover:bg-violet-500 text-white"
           >
             <Plus className="w-5 h-5" />
           </Button>
         </div>
 
         {showCreate && (
-          <form onSubmit={handleCreatePatient} className="bg-sky-50 p-4 rounded-2xl mb-4 border border-sky-200 space-y-3">
-            <h3 className="font-bold text-sky-800 text-sm">Nuevo Paciente (Padre/Tutor)</h3>
-            <Input required placeholder="Nombre completo" value={newName} onChange={e => setNewName(e.target.value)} className="rounded-full bg-white border-sky-200" />
-            <Input required type="email" placeholder="Correo electrónico" value={newEmail} onChange={e => setNewEmail(e.target.value)} className="rounded-full bg-white border-sky-200" />
-            <Input placeholder="Teléfono" value={newPhone} onChange={e => setNewPhone(e.target.value)} className="rounded-full bg-white border-sky-200" />
-            <Button type="submit" disabled={loading} className="w-full rounded-full bg-sky-500 hover:bg-sky-600 font-bold">
+          <form onSubmit={handleCreatePatient} className="bg-purple-50 p-4 rounded-2xl mb-4 border border-purple-200 space-y-3">
+            <h3 className="font-bold text-violet-800 text-sm">Nuevo Paciente (Padre/Tutor)</h3>
+            <Input required placeholder="Nombre completo" value={newName} onChange={e => setNewName(e.target.value)} className="rounded-full bg-white border-purple-200" />
+            <Input required type="email" placeholder="Correo electrónico" value={newEmail} onChange={e => setNewEmail(e.target.value)} className="rounded-full bg-white border-purple-200" />
+            <Input placeholder="Teléfono" value={newPhone} onChange={e => setNewPhone(e.target.value)} className="rounded-full bg-white border-purple-200" />
+            <Button type="submit" disabled={loading} className="w-full rounded-full bg-purple-500 hover:bg-violet-600 font-bold">
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Guardar Registro"}
             </Button>
           </form>
@@ -168,28 +168,28 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
       {/* Expediente del Paciente */}
       <div className="lg:col-span-2">
         {!selectedPatient ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-amber-200 rounded-[2rem] bg-amber-50/50">
-            <FileText className="w-16 h-16 text-amber-300 mb-4" />
-            <h3 className="text-xl font-black text-amber-900 mb-2">Selecciona un paciente</h3>
-            <p className="text-amber-800/70 font-medium">
+          <div className="h-full flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-purple-200 rounded-[2rem] bg-purple-50/50 min-h-[300px]">
+            <FileText className="w-16 h-16 text-purple-300 mb-4" />
+            <h3 className="text-xl font-black text-purple-900 mb-2">Selecciona un paciente</h3>
+            <p className="text-purple-800/70 font-medium">
               Haz clic en un paciente de la lista para ver o agregar notas a su expediente clínico.
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-[2rem] border-2 border-amber-100 shadow-sm overflow-hidden flex flex-col h-[calc(100vh-12rem)]">
+          <div className="bg-white rounded-[2rem] border-2 border-purple-100 shadow-sm overflow-hidden flex flex-col lg:h-[calc(100vh-12rem)]">
             
             {/* Header Expediente */}
-            <div className="bg-amber-50 p-6 border-b-2 border-amber-100 flex items-center justify-between flex-wrap gap-4">
-              <div>
-                <h2 className="text-2xl font-black text-amber-900">{selectedPatient.name}</h2>
-                <p className="text-amber-700 font-bold text-sm">{selectedPatient.email} • {selectedPatient.phone || 'Sin teléfono'}</p>
+            <div className="bg-purple-50 p-6 border-b-2 border-purple-100 flex items-center justify-between flex-wrap gap-4">
+              <div className="w-full sm:w-auto">
+                <h2 className="text-2xl font-black text-purple-900">{selectedPatient.name}</h2>
+                <p className="text-purple-700 font-bold text-sm">{selectedPatient.email} • {selectedPatient.phone || 'Sin teléfono'}</p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                 <Button 
                   onClick={() => setShowPasswordForm(!showPasswordForm)}
                   variant="outline"
                   size="sm"
-                  className="rounded-full border-2 border-amber-200 text-amber-700 hover:bg-amber-100 font-bold"
+                  className="rounded-full border-2 border-purple-200 text-purple-700 hover:bg-purple-100 font-bold"
                 >
                   <Key className="w-4 h-4 mr-2" />
                   Acceso a Portal
@@ -204,7 +204,7 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
                   <Trash2 className="w-4 h-4 mr-2" />
                   Eliminar
                 </Button>
-                <span className="inline-block px-4 py-1 bg-white rounded-full text-amber-600 font-black text-sm border-2 border-amber-200 shadow-sm">
+                <span className="inline-block px-4 py-1 bg-white rounded-full text-purple-600 font-black text-sm border-2 border-purple-200 shadow-sm">
                   {selectedPatient._count?.clinicalRecords || 0} Notas
                 </span>
               </div>
@@ -245,21 +245,21 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
 
             {/* Asignar Contraseña Form */}
             {showPasswordForm && (
-              <div className="p-6 bg-amber-100/50 border-b-2 border-amber-100 flex items-end gap-4">
+              <div className="p-6 bg-purple-100/50 border-b-2 border-purple-100 flex items-end gap-4">
                 <div className="flex-1 space-y-2">
-                  <label className="font-bold text-amber-900 text-sm">Nueva Contraseña para el Padre</label>
+                  <label className="font-bold text-purple-900 text-sm">Nueva Contraseña para el Padre</label>
                   <Input 
                     type="text" 
                     placeholder="Ej. Familia123!" 
                     value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}
-                    className="rounded-full bg-white border-amber-200 focus-visible:ring-primary"
+                    className="rounded-full bg-white border-purple-200 focus-visible:ring-primary"
                   />
                 </div>
                 <Button 
                   onClick={handleSetPassword}
                   disabled={loadingPassword || !newPassword}
-                  className="rounded-full bg-amber-500 hover:bg-amber-600 font-bold text-white shadow-sm"
+                  className="rounded-full bg-purple-500 hover:bg-purple-600 font-bold text-white shadow-sm"
                 >
                   {loadingPassword ? <Loader2 className="w-4 h-4 animate-spin" /> : "Guardar y Asignar"}
                 </Button>
@@ -280,7 +280,7 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
                   <Button 
                     onClick={handleAddRecord} 
                     disabled={loadingRecord || !newRecord.trim()}
-                    className="rounded-full px-8 font-black bg-primary hover:bg-orange-500 text-white"
+                    className="rounded-full px-8 font-black bg-primary hover:bg-violet-500 text-white"
                   >
                     {loadingRecord ? <Loader2 className="w-5 h-5 animate-spin" /> : "Guardar Nota"}
                   </Button>
@@ -296,7 +296,7 @@ export function PatientsView({ initialPatients }: { initialPatients: User[] }) {
                 records.map(record => (
                   <div key={record.id} className="bg-white border-2 border-zinc-100 p-5 rounded-2xl shadow-sm">
                     <div className="flex justify-between items-center mb-3">
-                      <span className="inline-flex items-center gap-2 text-xs font-bold text-sky-700 bg-sky-100 px-3 py-1 rounded-full">
+                      <span className="inline-flex items-center gap-2 text-xs font-bold text-violet-700 bg-purple-100 px-3 py-1 rounded-full">
                         <FileText className="w-3 h-3" />
                         Sesión Registrada
                       </span>

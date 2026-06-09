@@ -8,17 +8,19 @@ export default function Home() {
       
       {/* Navbar Minimalista e Infantil */}
       <header className="absolute top-0 z-50 w-full bg-transparent">
-        <div className="container flex h-24 items-center justify-between px-6 lg:px-12">
+        <div className="container flex h-24 items-center justify-between px-4 sm:px-6 lg:px-12">
           <div className="flex items-center gap-2">
-            <span className="text-3xl font-extrabold tracking-tighter text-primary">PsiAgend.</span>
+            <span className="text-2xl sm:text-3xl font-extrabold tracking-tighter text-primary">PsiAgend.</span>
           </div>
-          <nav className="flex items-center gap-8">
-            <Link href="/login" className="text-base font-bold text-foreground/80 hover:text-primary transition-colors">
-              Acceso a Padres
+          <nav className="flex items-center gap-3 sm:gap-8">
+            <Link href="/login" className="text-sm sm:text-base font-bold text-foreground/80 hover:text-primary transition-colors">
+              <span className="hidden sm:inline">Acceso a Padres</span>
+              <span className="sm:hidden">Acceso</span>
             </Link>
             <Link href="/agendar">
-              <Button variant="default" className="rounded-full px-8 h-12 font-bold shadow-md bg-primary hover:bg-primary/90 text-white border-2 border-transparent hover:border-orange-200 transition-all">
-                Reservar Cita
+              <Button variant="default" className="rounded-full px-4 sm:px-8 h-10 sm:h-12 text-sm sm:text-base font-bold shadow-md bg-primary hover:bg-primary/90 text-white border-2 border-transparent hover:border-violet-200 transition-all">
+                <span className="hidden sm:inline">Reservar Cita</span>
+                <span className="sm:hidden">Agendar</span>
               </Button>
             </Link>
           </nav>
@@ -43,7 +45,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 <Link href="/agendar">
-                  <Button size="lg" className="rounded-full h-14 px-10 text-lg font-bold w-full sm:w-auto shadow-lg shadow-orange-200 bg-primary hover:bg-orange-500 text-white transition-all hover:-translate-y-1">
+                  <Button size="lg" className="rounded-full h-14 px-10 text-lg font-bold w-full sm:w-auto shadow-lg shadow-violet-200 bg-primary hover:bg-violet-500 text-white transition-all hover:-translate-y-1">
                     Agenda tu primera sesión
                   </Button>
                 </Link>
@@ -85,16 +87,16 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="bg-amber-100 rounded-[2.5rem] p-10 flex flex-col justify-end min-h-[300px] border-2 border-amber-200 transition-transform duration-500 hover:-translate-y-2">
-                <h3 className="text-2xl font-black tracking-tight mb-3 text-amber-900">Acompañamiento</h3>
-                <p className="text-amber-800/80 leading-relaxed font-medium">
+              <div className="bg-purple-100 rounded-[2.5rem] p-10 flex flex-col justify-end min-h-[300px] border-2 border-purple-200 transition-transform duration-500 hover:-translate-y-2">
+                <h3 className="text-2xl font-black tracking-tight mb-3 text-purple-900">Acompañamiento</h3>
+                <p className="text-purple-800/80 leading-relaxed font-medium">
                   Trabajamos en equipo con los padres para lograr el mejor desarrollo.
                 </p>
               </div>
 
-              <div className="bg-orange-400 text-white rounded-[2.5rem] p-10 flex flex-col justify-end min-h-[300px] shadow-lg shadow-orange-200 transition-transform duration-500 hover:-translate-y-2">
+              <div className="bg-violet-400 text-white rounded-[2.5rem] p-10 flex flex-col justify-end min-h-[300px] shadow-lg shadow-violet-200 transition-transform duration-500 hover:-translate-y-2">
                 <h3 className="text-2xl font-black tracking-tight mb-3">Horarios Flexibles</h3>
-                <p className="text-orange-50 leading-relaxed font-medium">
+                <p className="text-violet-50 leading-relaxed font-medium">
                   Sabemos que la rutina escolar es importante, por eso ofrecemos citas en horarios adaptados a ti.
                 </p>
               </div>
@@ -111,7 +113,7 @@ export default function Home() {
         </section>
       </main>
       
-      <footer className="w-full bg-amber-50 py-16 border-t-4 border-amber-100">
+      <footer className="w-full bg-purple-50 py-16 border-t-4 border-purple-100">
         <div className="container px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-3xl font-black tracking-tighter text-primary">PsiAgend.</div>
           <p className="text-base text-muted-foreground text-center font-bold">

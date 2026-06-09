@@ -50,37 +50,37 @@ export default async function PortalPage() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Próximas Citas */}
-        <div className="bg-white rounded-[2rem] p-8 border-4 border-amber-100 shadow-sm shadow-amber-900/5">
+        <div className="bg-white rounded-[2rem] p-8 border-4 border-purple-100 shadow-sm shadow-purple-900/5">
           <div className="flex items-center gap-3 mb-6">
-            <div className="size-12 rounded-full bg-amber-100 flex items-center justify-center">
-              <CalendarHeart className="w-6 h-6 text-amber-600" />
+            <div className="size-12 rounded-full bg-purple-100 flex items-center justify-center">
+              <CalendarHeart className="w-6 h-6 text-purple-600" />
             </div>
-            <h2 className="text-2xl font-black text-amber-900">Próximas Sesiones</h2>
+            <h2 className="text-2xl font-black text-purple-900">Próximas Sesiones</h2>
           </div>
 
           <div className="space-y-4">
             {upcomingAppointments.length === 0 ? (
-              <div className="text-center py-10 bg-amber-50 rounded-3xl border-2 border-dashed border-amber-200">
-                <p className="text-amber-800 font-bold">No tienes sesiones programadas próximamente.</p>
-                <p className="text-amber-600 text-sm mt-1">Recuerda que puedes agendar nuevas citas desde la página principal.</p>
+              <div className="text-center py-10 bg-purple-50 rounded-3xl border-2 border-dashed border-purple-200">
+                <p className="text-purple-800 font-bold">No tienes sesiones programadas próximamente.</p>
+                <p className="text-purple-600 text-sm mt-1">Recuerda que puedes agendar nuevas citas desde la página principal.</p>
               </div>
             ) : (
               upcomingAppointments.map((cita) => (
-                <div key={cita.id} className="flex flex-col sm:flex-row gap-4 p-5 bg-amber-50 rounded-3xl border-2 border-amber-100">
-                  <div className="bg-white border-2 border-amber-200 px-4 py-3 rounded-2xl flex flex-col items-center justify-center min-w-[100px] shadow-sm">
-                    <span className="text-xs font-bold text-amber-600 uppercase">{cita.date.toLocaleDateString('es-ES', { timeZone: 'UTC', month: 'short' })}</span>
-                    <span className="text-3xl font-black text-amber-900 leading-none">{cita.date.getUTCDate()}</span>
+                <div key={cita.id} className="flex flex-col sm:flex-row gap-4 p-5 bg-purple-50 rounded-3xl border-2 border-purple-100">
+                  <div className="bg-white border-2 border-purple-200 px-4 py-3 rounded-2xl flex flex-col items-center justify-center min-w-[100px] shadow-sm">
+                    <span className="text-xs font-bold text-purple-600 uppercase">{cita.date.toLocaleDateString('es-ES', { timeZone: 'UTC', month: 'short' })}</span>
+                    <span className="text-3xl font-black text-purple-900 leading-none">{cita.date.getUTCDate()}</span>
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="w-4 h-4 text-amber-600" />
-                      <span className="font-black text-amber-900 text-lg">{cita.startTime}</span>
+                      <Clock className="w-4 h-4 text-purple-600" />
+                      <span className="font-black text-purple-900 text-lg">{cita.startTime}</span>
                     </div>
-                    <p className="text-sm font-bold text-amber-700 flex items-center gap-1 mt-1">
+                    <p className="text-sm font-bold text-purple-700 flex items-center gap-1 mt-1">
                       {cita.status === 'CONFIRMED' ? (
                          <><CheckCircle2 className="w-4 h-4 text-emerald-500" /> <span className="text-emerald-600">Cita Confirmada</span></>
                       ) : (
-                         <><Clock className="w-4 h-4 text-orange-400" /> <span className="text-orange-500">Pendiente de Confirmación</span></>
+                         <><Clock className="w-4 h-4 text-violet-400" /> <span className="text-violet-500">Pendiente de Confirmación</span></>
                       )}
                     </p>
                   </div>
@@ -89,8 +89,8 @@ export default async function PortalPage() {
             )}
             
             {upcomingAppointments.length > 0 && (
-              <div className="mt-4 bg-amber-100/50 p-4 rounded-2xl border border-amber-200 text-center">
-                <p className="text-sm font-medium text-amber-800">
+              <div className="mt-4 bg-purple-100/50 p-4 rounded-2xl border border-purple-200 text-center">
+                <p className="text-sm font-medium text-purple-800">
                   <span className="font-bold">Importante:</span> Para cancelar o reprogramar una cita, por favor comunícate directamente con tu terapeuta.
                 </p>
               </div>

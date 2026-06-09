@@ -132,6 +132,27 @@ export async function getAppointments(date: Date) {
   }
 }
 
+export async function getActiveAppointmentDates() {
+  try {
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        status: { not: 'CANCELLED' }
+      },
+      select: {
+        date: true
+      }
+    })
+    
+    // Obtener array de fechas únicas en formato string ISO
+    const uniqueDates = Array.from(new Set(appointments.map(a => a.date.toISOString())))
+    
+    return { success: true, data: uniqueDates }
+  } catch (error) {
+    console.error("Error fetching appointment dates:", error)
+    return { success: false, error: "Error al obtener fechas." }
+  }
+}
+
 export async function updateAppointmentStatus(id: string, status: AppointmentStatus) {
   try {
     const updated = await prisma.appointment.update({

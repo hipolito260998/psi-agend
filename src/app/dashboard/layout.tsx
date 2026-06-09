@@ -23,10 +23,10 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/30 md:flex-row">
-      <aside className="hidden w-64 flex-col border-r-4 border-amber-50 bg-white md:flex">
-        <div className="flex h-24 items-center justify-between border-b-4 border-amber-50 px-6 gap-2">
+      <aside className="hidden w-64 flex-col border-r-4 border-purple-50 bg-white md:flex">
+        <div className="flex h-24 items-center justify-between border-b-4 border-purple-50 px-6 gap-2">
           <div className="flex items-center gap-3">
-            <div className="size-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-sm shadow-orange-200 shrink-0">
+            <div className="size-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-sm shadow-violet-200 shrink-0">
               <span className="text-primary-foreground text-xl font-bold">P</span>
             </div>
             <span className="text-xl font-black text-primary tracking-tight">PsiAgend</span>
@@ -34,7 +34,7 @@ export default async function DashboardLayout({
           <NotificationBell userId={session.user.id!} />
         </div>
         <DashboardNav />
-        <div className="border-t-4 border-amber-50 p-6">
+        <div className="border-t-4 border-purple-50 p-6">
           <form action={async () => {
             'use server'
             await signOut({ redirectTo: '/login' })
@@ -46,9 +46,14 @@ export default async function DashboardLayout({
           </form>
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      <main className="flex-1 overflow-y-auto p-6 md:p-8 pb-24 md:pb-8">
         {children}
       </main>
+
+      {/* Navegación Móvil (Bottom Tab Bar) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-purple-100 px-6 py-3 flex justify-between items-center z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+        <DashboardNav mobile />
+      </nav>
     </div>
   )
 }
