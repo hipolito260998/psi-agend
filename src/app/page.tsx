@@ -64,6 +64,7 @@ export default function Home() {
                   src="/landing-hero-kids.png" 
                   alt="Cuarto de juegos y terapia infantil" 
                   fill 
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                   priority
                 />
